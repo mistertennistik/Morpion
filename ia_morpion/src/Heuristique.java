@@ -34,6 +34,7 @@ public class Heuristique {
     public Heuristique() throws Exception {
     }
 
+    //pas utilisé
     public int evaluer(Etat t) {
         plateau = t.getPlateau();
         taillePlateau = plateau.getTaille();
@@ -87,6 +88,7 @@ public class Heuristique {
         return t;
     }
 
+    //tests
     public static void main(String[] args) throws Exception {
         Plateau p = new Plateau(5);
         Heuristique h = new Heuristique();

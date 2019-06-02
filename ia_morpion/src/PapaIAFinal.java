@@ -1,12 +1,11 @@
 public class PapaIAFinal extends JoueurIA {
 
 
-    Action meilleureAction = null;
-    Etat etatInit= null;
-
-     int PROFONDEUR_MAX ;
-     boolean flag = true;
-     Heuristique calcHeuristique;
+    private Action meilleureAction = null;
+    private Etat etatInit= null;
+    private int PROFONDEUR_MAX ;
+    private boolean flag = true;
+    private Heuristique calcHeuristique;
 
     /**
      * Constructeur
@@ -35,11 +34,19 @@ public class PapaIAFinal extends JoueurIA {
 
 
 
+    /**
+     * Algo alpha-beta adapté avec une heuristique
+     *
+     * @param e etat en cours d'évaluation
+     * @param alpha
+     * @param beta
+     * @param prof profondeur de parcours
+     */
     public int alphaBeta(Etat e, int alpha, int beta,int prof){
 
 
         if(isTerminal(e)){
-            return utilite(e,prof);
+            return utilite(e);
         }else if(prof==PROFONDEUR_MAX){
             return calcHeuristique.calculerGlo(e.getPlateau(),Symbole.values()[this.getID()]);
         }
@@ -101,8 +108,12 @@ public class PapaIAFinal extends JoueurIA {
         return e.getIdJoueurCourant()== this.getID();
     }
 
-
-    private int utilite(Etat e, int prof){
+    /**
+     * Donne l'utilité d'un état terminal.
+     *
+     * @param e etat terminal
+     */
+    private int utilite(Etat e){
         Situation situation = e.situationCourante();
         if(situation instanceof Victoire){
             if (((Victoire) situation).getVainqueur().equals(this)){
