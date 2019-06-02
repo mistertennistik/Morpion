@@ -1,36 +1,70 @@
-public class ApprofondissementIteratif extends JoueurIA {
+import java.util.List;
+
+public class PaPaIAlpha0 extends JoueurIA {
+
+    //pour le parcours en Largeur
+    Etat etatInit;
+    Heuristique calcHeuristique;
+    int meilleureHeuristique;
 
 
-    Action meilleureAction = null;
-    Etat etatInit= null;
-
-     int PROFONDEUR_MAX ;
-     boolean flag = true;
+    //pour Alpha-Beta
+    static int PROFONDEUR_MAX = 3;
 
     /**
      * Constructeur
      *
      * @param nom nom du joueur
      */
-    public ApprofondissementIteratif(String nom) {
+    public PaPaIAlpha0(String nom) throws Exception {
         super(nom);
+        calcHeuristique = new Heuristique();
+        meilleureHeuristique = -10000;
     }
+
+
 
     @Override
     public Action choisirAction(Etat etat) throws Exception {
-        etatInit = etat;
-        meilleureAction=null;
-        PROFONDEUR_MAX=0;
-        while(flag){
+        if(etat.getPlateau().getTaille()>3){
+            etatInit = etat;
+            actionMemorisee = etatInit.actionsPossibles().get(0); // au cas où...
+            meilleureHeuristique = -10000;
+            parcours();
+            return actionMemorisee;
+        }else{
+            etatInit = etat;
             alphaBeta(etat, -9999,+9999, 0);
-            actionMemorisee = meilleureAction;
-            PROFONDEUR_MAX++;
+            return actionMemorisee;
+
         }
 
-        return actionMemorisee;
     }
 
 
+    public void parcours() throws Exception {
+
+        Etat etatSuivantCourant = etatInit.clone();
+        int heuristiqueCourante;
+
+        List<Action> listeDesActionsPossibles = etatInit.actionsPossibles();
+
+
+
+        for (Action actionPossible : listeDesActionsPossibles) {
+            etatSuivantCourant.jouer(actionPossible);
+            heuristiqueCourante = calcHeuristique.calculerGlo(etatSuivantCourant.getPlateau(),Symbole.values()[etatSuivantCourant.getIdJoueurCourant()]);
+
+            if(heuristiqueCourante>= meilleureHeuristique){
+                meilleureHeuristique = heuristiqueCourante;
+                actionMemorisee = actionPossible;
+            }
+
+            etatSuivantCourant = etatInit.clone();
+        }
+
+
+    }
 
 
     public int alphaBeta(Etat e, int alpha, int beta,int prof){
@@ -54,7 +88,7 @@ public class ApprofondissementIteratif extends JoueurIA {
                     if (newAlpha > alpha) {
                         alpha = newAlpha;
                         if(e.equals(etatInit)){
-                            meilleureAction = e.actionsPossibles().get(j);
+                            actionMemorisee = e.actionsPossibles().get(j);
                         }
 
 
@@ -110,6 +144,8 @@ public class ApprofondissementIteratif extends JoueurIA {
 
 
     }
+
+
 
 
 }
