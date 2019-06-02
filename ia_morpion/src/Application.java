@@ -124,12 +124,12 @@ public class Application extends JFrame implements Observer {
 	 */
 	public static void main(String[] args) throws Exception {
 		// Créer N joueurs
-		Joueur j2 = new ParcoursEnLargeur2("PLR");
+		Joueur j2 = new ApprofondissementIteratif("PLR");
 		Joueur j1 = new PaPaIA("Bob");
 
 		
 		// Créer une partie
-		int taillePlateau = 3;
+		int taillePlateau = 7;
 		Partie p = new Partie(taillePlateau, j1, j2);
 		
 		//Créer une instance d'application graphique
